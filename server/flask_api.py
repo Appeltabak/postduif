@@ -14,7 +14,7 @@ def dict_factory(cursor, row):
 def hello():
 	return "data"
 
-@app.route("/api/get_flight/<id>.json", methods=['GET', 'OPTIONS'])
+@app.route("/api/get_flight/<id>", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_flight(id):
 	con = sqlite3.connect("database.db")

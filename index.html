@@ -8,43 +8,13 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4LIxjpP8xoX26k9FTIsQSxZrZfV43voA">
     </script>
     <script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/maps.js"></script>
     <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
-          center: { lat: 53.1, lng: 6.25},
-          zoom: 10,
-          mapTypeId: google.maps.MapTypeId.HYBRID,
-          disableDefaultUI: true
-        };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-
-        var flightPlanCoordinates = [
-          new google.maps.LatLng(53.232787, 6.5709585),
-          new google.maps.LatLng(53, 6)
-        ];
-        var lineSymbol = {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 8,
-          strokeColor: '#393'
-        };
-        var flightPath = new google.maps.Polyline({
-          path: flightPlanCoordinates,
-          geodesic: true,
-          strokeColor: '#FF0000',
-          strokeOpacity: 1.0,
-          strokeWeight: 2,
-          icons: [{
-            icon: lineSymbol,
-            offset: '100%'
-          }],
-        });
-
-        flightPath.setMap(map);
-      }
-      google.maps.event.addDomListener(window, 'load', initialize); 
-      $.getJSON("http://127.0.0.1:5000/api/get_flight/1.json", function(data){
-        console.log(data);
+      $.getJSON("http://127.0.0.1:5000/api/get_flight/1", function(data){
+        draw_flight(map, data)
+      });
+      $.getJSON("http://127.0.0.1:5000/api/get_flight/2", function(data){
+        draw_flight(map, data)
       });
     </script>
   </head>
