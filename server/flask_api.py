@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import jsonify
+from decorator import crossdomain
 app = Flask(__name__)
 
 def dict_factory(cursor, row):
@@ -13,7 +14,8 @@ def dict_factory(cursor, row):
 def hello():
 	return "data"
 
-@app.route("/api/get_flight/<id>")
+@app.route("/api/get_flight/<id>.json", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
 def get_flight(id):
 	con = sqlite3.connect("database.db")
 	con.row_factory = dict_factory
