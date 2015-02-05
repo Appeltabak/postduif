@@ -5,16 +5,17 @@
       html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
     </style>
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4LIxjpP8xoX26k9FTIsQSxZrZfV43voA">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4LIxjpP8xoX26k9FTIsQSxZrZfV43voA&libraries=geometry">
     </script>
     <script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
     <script type="text/javascript" src="js/maps.js"></script>
     <script type="text/javascript">
-      $.getJSON("http://127.0.0.1:5000/api/get_flight/1", function(data){
+      $.getJSON("http://127.0.0.1:5000/api/get_flight/3", function(data){
         draw_flight(map, data)
       });
-      $.getJSON("http://127.0.0.1:5000/api/get_flight/2", function(data){
+      $.getJSON("http://127.0.0.1:5000/api/get_flight/4", function(data){
         draw_flight(map, data)
+        start_updateloop();
       });
     </script>
   </head>
