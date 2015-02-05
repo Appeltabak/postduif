@@ -1,4 +1,4 @@
 postduif
 ========
 
-Postduif is a superawesome web application with duif's.
+Postduif is a super awesome web application with duif's.
