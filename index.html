@@ -10,16 +10,24 @@
     <script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
     <script type="text/javascript" src="js/maps.js"></script>
     <script type="text/javascript">
+      // Get json from flask api, draw flight line with draw_flight function
+      // TODO: make a query to get all flight from the corrosponding user.
+      $.getJSON("http://127.0.0.1:5000/api/get_flight/2", function(data){
+        draw_flight(map, data);
+      });
       $.getJSON("http://127.0.0.1:5000/api/get_flight/3", function(data){
-        draw_flight(map, data)
+        draw_flight(map, data);
       });
       $.getJSON("http://127.0.0.1:5000/api/get_flight/4", function(data){
-        draw_flight(map, data)
+        draw_flight(map, data);
+        /*start the updateloop, in getJSON call to make sure it doesn't start before all lines are drawn
+        TODO: make a better way to make sure the lines are drawn.*/
         start_updateloop();
       });
     </script>
   </head>
   <body>
+  <!-- div where the map will be in -->
 <div id="map-canvas"></div>
   </body>
 </html>
