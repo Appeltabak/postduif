@@ -43,7 +43,7 @@ def get_flight(id):
     con = sqlite3.connect(DATABASE_URI)
     con.row_factory = dict_factory
     cur = con.cursor()
-    cur.execute("SELECT * FROM flight WHERE id = " + str(id))
+    cur.execute("SELECT flight.*, duif.speed FROM flight, duif WHERE flight.id = " + str(id) + " AND flight.duif_id = duif.id")
     result = cur.fetchone()
     con.close()
     return jsonify(result)

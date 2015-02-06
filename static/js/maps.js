@@ -14,7 +14,6 @@ var lineSymbol = {
 };
 /**
  * builds new map object.
- * @return map object
  */
 function initialize() {
   var mapOptions = {
@@ -34,8 +33,8 @@ function initialize() {
  */
 function draw_flight(map, obj){
   var flightPlanCoordinates = [
-    new google.maps.LatLng(obj.begin_lat, obj.begin_long),
-    new google.maps.LatLng(obj.end_lat, obj.end_long)
+    new google.maps.LatLng(JSON.parse(obj.begin).lat, JSON.parse(obj.begin).lng),
+    new google.maps.LatLng(JSON.parse(obj.end).lat, JSON.parse(obj.end).lng)
   ];
   lines[lines.length] = new google.maps.Polyline({
     path: flightPlanCoordinates,
@@ -89,7 +88,7 @@ function updateLoop() {
  * @return the percentage
  */
 function distanceToPercentage(dataObj, curr_dis){
-  var dis = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(dataObj.begin_lat, dataObj.begin_long), new google.maps.LatLng(dataObj.end_lat, dataObj.end_long));
+  var dis = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(JSON.parse(dataObj.begin).lat, JSON.parse(dataObj.begin).lng), new google.maps.LatLng(JSON.parse(dataObj.end).lat, JSON.parse(dataObj.end).lng));
   var percent = 100 / dis * curr_dis;
   return percent;
 }

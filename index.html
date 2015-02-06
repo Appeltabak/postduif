@@ -1,4 +1,3 @@
-
 <html>
   <head>
     <style type="text/css">
@@ -15,10 +14,7 @@
       $.getJSON("http://127.0.0.1:5000/api/get_flight/2", function(data){
         draw_flight(map, data);
       });
-      $.getJSON("http://127.0.0.1:5000/api/get_flight/3", function(data){
-        draw_flight(map, data);
-      });
-      $.getJSON("http://127.0.0.1:5000/api/get_flight/4", function(data){
+      $.getJSON("http://127.0.0.1:5000/api/get_flight/1", function(data){
         draw_flight(map, data);
         /*start the updateloop, in getJSON call to make sure it doesn't start before all lines are drawn
         TODO: make a better way to make sure the lines are drawn.*/
