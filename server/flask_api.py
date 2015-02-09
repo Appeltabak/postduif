@@ -29,14 +29,7 @@ def get_flight(id):
     Returns:
         One JSON formated data object of a single flight.
         example:
-        {
-            "begin": "{\"lat\":53.349923,\"lng\":6.6434699}",
-            "duif_id": 1,
-            "end": "{\"lat\":53.232787,\"lng\":6.5709585}",
-            "id": 1,
-            "speed": 22,
-            "start_time": 0
-	}
+           (NOPE)
         Make sure to cast the 'begin' field to a JSON object upon usage in javascript with JSON.parse(str). 
     """
     # relative path to database file.
