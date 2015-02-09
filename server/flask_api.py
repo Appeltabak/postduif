@@ -30,14 +30,14 @@ def get_flight(id):
         One JSON formated data object of a single flight.
         example:
         {
-          "begin_lat": 53.232787,
-          "begin_long": 6.5709585,
-          "end_lat": 53,
-          "end_long": 6,
-          "id": 1,
-          "speed": 22,
-          "start_time": 1422917121
-        }
+            "begin": "{\"lat\":53.349923,\"lng\":6.6434699}",
+            "duif_id": 1,
+            "end": "{\"lat\":53.232787,\"lng\":6.5709585}",
+            "id": 1,
+            "speed": 22,
+            "start_time": 0
+	}
+        Make sure to cast the 'begin' field to a JSON object upon usage in javascript with JSON.parse(str). 
     """
     # relative path to database file.
     con = sqlite3.connect(DATABASE_URI)
