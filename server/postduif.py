@@ -1,23 +1,34 @@
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, Column, Integer, String, Enum, ForeignKey
+from sqlalchemy.orm import sessionmaker, relationship
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////database.db'
-db = SQLAlchemy(app)
+engine = create_engine('sqlite:///database.db', echo=True)
 
-class Duif():
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-    speed = db.Column(db.Integer)
-    level = db.Column(db.Integer)
-    state = db.Column(db.Enum)
-    home_loc = db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+Session = sessionmaker(bind=engine)
 
-    def __init__(self, name, speed, level, state, home_loc, user_id):
-        self.name = name
-        self.speed = speed
-        self.level = level
-        self.state = state
-        self.home_loc = home_loc
-        self.user_id = user_id
+Base = declarative_base()
+
+
+class Duif(Base):
+    __tablename__ = 'duif'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True)
+    speed = Column(Integer)
+    level = Column(Integer)
+    state = Column(Enum)
+    home_loc = Column(String)
+
+    user_id = relationship()
+
+
+class Flight(Base):
+    __tablename__ = 'flight'
+
+    id = Column(Integer, primary_key=True)
+    duif_id = Column(ForeignKey('duif_id'))
+    start_time = Column(Integer)
+    end_time = Column(Integer)
+    msg_id = Column(ForeignKey('msg_id'))
+    
