@@ -4,7 +4,6 @@ from flask import jsonify
 from flask import request
 from decorator import crossdomain
 from math import radians, cos, sin, asin, sqrt
-import ast
 app = Flask(__name__)
 
 import os
@@ -38,10 +37,12 @@ def get_flight(id):
     # relative path to database file.
     con = sqlite3.connect(DATABASE_URI)
     cur = con.cursor()
-    cur.execute("SELECT flight.*, duif.speed FROM flight, duif WHERE flight.id = " + str(id) + " AND flight.duif_id = duif.id")
+    cur.execute("SELECT flight.*, duif.speed FROM flight, duif WHERE flight.id = " + str(id) +
+                " AND flight.duif_id = duif.id")
     result = cur.fetchone()
     con.close()
     return jsonify(result)
+
 
 @app.route("/api/send_msg", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -55,33 +56,48 @@ def send_msg():
         receiver_id
         sender_id
         sealed
-    test url: 127.0.0.1:5000/api/send_msg?duif_id=1&start_time=1423524808&msg=test%20bericht&receiver_id=1&sender_id=2&sealed=1
-    Not working because the return is in a json format which is dum.
+    test url:
+    127.0.0.1:5000/api/send_msg?duif_id=1&start_time=1423524808&msg=test%20bericht&receiver_id=1&sender_id=2&sealed=1
+
     :return:
 
     """
-    print(request.args)
     if request.args.get('duif_id') is None or request.args.get('start_time') is None or request.args.get('msg') is None or \
             request.args.get('receiver_id') is None or request.args.get('sender_id') is None or \
             request.args.get('sealed') is None:
         return "Error: must provide all fields"
+
+    # establish connection
     con = sqlite3.connect(DATABASE_URI)
-    #con.row_factory = dict_factory
     cur = con.cursor()
+
+    # get all variables for the end_time calculation
     cur.execute("SELECT loc FROM user WHERE id = " + request.args.get("receiver_id"))
-    latlng_rec = str(cur.fetchone()[0]).split(";")
+    latlng_rec = str(cur.fetchone()[0]).split(";")  # array width the receiver location
     cur.execute("SELECT loc FROM user WHERE id = " + request.args.get("sender_id"))
-    latlng_send = str(cur.fetchone()[0]).split(';')
+    latlng_send = str(cur.fetchone()[0]).split(';')  # array width the sender location
     distance = haversine(float(latlng_rec[1]), float(latlng_rec[0]), float(latlng_send[1]), float(latlng_send[0]))
     cur.execute("SELECT speed FROM duif WHERE id = " + request.args.get("duif_id"))
     speed = cur.fetchone()[0]
     time = distance / speed
-    end_time = int(request.args.get("start_time")) + time
-    print(round(end_time))
+    end_time = round(int(request.args.get("start_time")) + time)
+
+    # insert message into database
+    cur.execute("INSERT INTO message (msg, receiver_id, sender_id, sealed, status)" +
+                "VALUES ('" + str(request.args.get('msg')) + "', " + str(request.args.get('receiver_id')) + ", " +
+                str(request.args.get('sender_id')) + ", " + str(request.args.get('sealed')) + ", " + str("0") + ")")
+    con.commit()  # commit the message
+
+    # insert flight into database. Get message id from con.lastrowid
     cur.execute("INSERT INTO flight (start_time, end_time, duif_id, msg_id) " +
-                "VALUES (" + str(request.args.get('start_time')) + ", " + str(end_time) + ", " + str(request.args.get("duif_id")) + ", " + str(0) + ")")
+                "VALUES (" + str(request.args.get('start_time')) + ", " + str(end_time) + ", " +
+                str(request.args.get("duif_id")) + ", " + str(cur.lastrowid) + ")")
+    con.commit()  # commit the flight
+
     con.close()
-    return "no errors"
+
+    return "1"
+
 
 def haversine(lon1, lat1, lon2, lat2):
     """
