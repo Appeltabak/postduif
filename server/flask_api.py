@@ -31,14 +31,29 @@ def get_flight(id):
     Returns:
         One JSON formated data object of a single flight.
         example:
-           (NOPE)
-        Make sure to cast the 'begin' field to a JSON object upon usage in javascript with JSON.parse(str). 
+           {
+              "duif_id": 1,
+              "end_time": 1423525314,
+              "id": 3,
+              "msg_id": 1,
+              "receiver_loc": "53.349923;6.6434699",
+              "sender_loc": "53.449983;6.6414699",
+              "speed": 22,
+              "start_time": 1423524808
+            }
+        receiver_loc and sender_loc can be split width a ';' separator
     """
     # relative path to database file.
     con = sqlite3.connect(DATABASE_URI)
     cur = con.cursor()
-    cur.execute("SELECT flight.*, duif.speed FROM flight, duif WHERE flight.id = " + str(id) +
-                " AND flight.duif_id = duif.id")
+    cur.row_factory = dict_factory
+    cur.execute("SELECT flight.*, duif.speed, receiver.loc AS receiver_loc, sender.loc AS sender_loc "
+                "FROM flight "
+                "LEFT JOIN duif ON flight.duif_id = duif.id "
+                "LEFT JOIN message ON flight.msg_id = message.id "
+                "LEFT JOIN user AS receiver ON message.receiver_id = receiver.id "
+                "LEFT JOIN user AS sender ON message.sender_id = sender.id "
+                "WHERE flight.id = " + id)
     result = cur.fetchone()
     con.close()
     return jsonify(result)
