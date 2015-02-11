@@ -1,8 +1,7 @@
-from flask import Flask
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, Enum, ForeignKey, \
     Text, Boolean
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, backref
 
 engine = create_engine('sqlite:///database.db', echo=True)
 
@@ -21,7 +20,7 @@ class Duif(Base):
     state = Column(Enum)
     home_loc = Column(String)
 
-    user_id = relationship()
+    user_id = Column(Integer)
 
 
 class Flight(Base):
@@ -52,5 +51,9 @@ class User(Base):
     username = Column(String(50))
     password = Column(String(50))
     salt = Column(String(50))
-    email = Column(String(50))
+    mail = Column(String(50))
     loc = Column(String(100))
+
+session = Session()
+for user in session.query(User).filter():
+    print(user.username)
