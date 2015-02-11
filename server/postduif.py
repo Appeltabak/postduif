@@ -20,17 +20,18 @@ class Duif(Base):
     state = Column(Enum)
     home_loc = Column(String)
 
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship('User')
 
 
 class Flight(Base):
     __tablename__ = 'flight'
 
     id = Column(Integer, primary_key=True)
-    duif_id = Column(ForeignKey('duif_id'))
+    duif_id = Column(Integer, ForeignKey('duif.id'))
     start_time = Column(Integer)
     end_time = Column(Integer)
-    msg_id = Column(ForeignKey('msg_id'))
+    msg_id = Column(Integer, ForeignKey('msg.id'))
 
 
 class Message(Base):
@@ -38,8 +39,8 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True)
     msg = Column(Text)
-    receiver_id = Column(ForeignKey('user_id'))
-    sender_id = Column(ForeignKey('user_id'))
+    receiver_id = Column(Integer, ForeignKey('user.id'))
+    sender_id = Column(Integer, ForeignKey('user.id'))
     sealed = Column(Boolean)
     status = Column(Integer)
 
@@ -55,5 +56,5 @@ class User(Base):
     loc = Column(String(100))
 
 session = Session()
-for user in session.query(User).filter():
-    print(user.username)
+for duif in session.query(Duif):
+    print(duif)
