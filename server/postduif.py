@@ -17,8 +17,7 @@ class Duif(Base):
     name = Column(String(50), unique=True)
     speed = Column(Integer)
     level = Column(Integer)
-    state = Column(Enum)
-    home_loc = Column(String)
+    transport_user_id = Column(Integer)
 
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User')
@@ -52,9 +51,21 @@ class User(Base):
     username = Column(String(50))
     password = Column(String(50))
     salt = Column(String(50))
-    mail = Column(String(50))
-    loc = Column(String(100))
+    email = Column(String(50))
+    location = Column(String(100))
 
 session = Session()
+for user in session.query(User).join(Duif).filter(Duif.name == 'John Doe').all():
+    print(user.username)
+
+for user in session.query(User).filter(User.username == 'Piet'):
+    print(user.username)
+
 for duif in session.query(Duif):
-    print(duif)
+    print(duif.name)
+
+for flight in session.query(Flight):
+    print(flight.start_time)
+
+for message in session.query(Message):
+    print(message.msg)
