@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine, Column, Integer, String, Enum, ForeignKey, \
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, \
     Text, Boolean
-from sqlalchemy.orm import sessionmaker, relationship, backref
+from sqlalchemy.orm import sessionmaker, relationship
 
 engine = create_engine('sqlite:///database.db', echo=True)
 

@@ -3,9 +3,9 @@ import sqlite3
 from flask import jsonify
 from flask import request
 
-from decorator import crossdomain
-from controllers import haversine, dict_factory
-from . import app
+from server import app
+from server.decorator import crossdomain
+from server.controllers import haversine, dict_factory
 
 
 @app.route("/api/get_flight/<id>", methods=['GET', 'OPTIONS'])

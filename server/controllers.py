@@ -17,6 +17,7 @@ def haversine(lon1, lat1, lon2, lat2):
     r = 6371000  # Radius of earth in meters. Use 3956 for miles
     return c * r
 
+
 def dict_factory(cursor, row):
     """Formats sqlite3 output to JSON"""
     d = {}
