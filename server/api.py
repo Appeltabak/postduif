@@ -2,18 +2,6 @@ import sqlite3
 
 from flask import jsonify
 from flask import request
-<<<<<<< HEAD:server/api.py
-=======
-from decorator import crossdomain
-app = Flask(__name__)
-
-import os
-from server import haversine
-
-_basedir = os.path.abspath(os.path.dirname(__file__))
-
-DATABASE_URI = os.path.join(_basedir, 'database.db')
->>>>>>> origin/develop:server/flask_api.py
 
 from decorator import crossdomain
 from controllers import haversine, dict_factory
@@ -112,10 +100,6 @@ def send_msg():
 
     return "1"
 
-<<<<<<< HEAD:server/api.py
+
 # if __name__ == "__main__":
 #     app.run(debug=True)
-=======
-if __name__ == "__main__":
-    app.run(debug=True)
->>>>>>> origin/develop:server/flask_api.py
