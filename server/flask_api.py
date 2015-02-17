@@ -3,10 +3,10 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from decorator import crossdomain
-from math import radians, cos, sin, asin, sqrt
 app = Flask(__name__)
 
 import os
+from server import haversine
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -112,23 +112,6 @@ def send_msg():
     con.close()
 
     return "1"
-
-
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-
-    # haversine formula
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a))
-    r = 6371000  # Radius of earth in meters. Use 3956 for miles
-    return c * r
 
 if __name__ == "__main__":
     app.run(debug=True)
