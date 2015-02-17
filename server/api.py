@@ -1,24 +1,11 @@
 import sqlite3
-from flask import Flask
+
 from flask import jsonify
 from flask import request
+
 from decorator import crossdomain
-from math import radians, cos, sin, asin, sqrt
-app = Flask(__name__)
-
-import os
-
-_basedir = os.path.abspath(os.path.dirname(__file__))
-
-DATABASE_URI = os.path.join(_basedir, 'database.db')
-
-
-def dict_factory(cursor, row):
-    """Formats sqlite3 output to JSON"""
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
+from controllers import haversine, dict_factory
+from . import app
 
 
 @app.route("/api/get_flight/<id>", methods=['GET', 'OPTIONS'])
@@ -44,7 +31,7 @@ def get_flight(id):
         receiver_loc and sender_loc can be split width a ';' separator
     """
     # relative path to database file.
-    con = sqlite3.connect(DATABASE_URI)
+    con = sqlite3.connect(app.config['DATABASE_URI'])
     cur = con.cursor()
     cur.row_factory = dict_factory
     cur.execute("SELECT flight.*, duif.speed, receiver.loc AS receiver_loc, sender.loc AS sender_loc "
@@ -83,7 +70,7 @@ def send_msg():
         return "Error: must provide all fields"
 
     # establish connection
-    con = sqlite3.connect(DATABASE_URI)
+    con = sqlite3.connect(app.config['DATABASE_URI'])
     cur = con.cursor()
 
     # get all variables for the end_time calculation
@@ -113,22 +100,5 @@ def send_msg():
 
     return "1"
 
-
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-
-    # haversine formula
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a))
-    r = 6371000  # Radius of earth in meters. Use 3956 for miles
-    return c * r
-
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True)

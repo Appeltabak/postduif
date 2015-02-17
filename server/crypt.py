@@ -1,6 +1,6 @@
 import hashlib
 import uuid
-import postduif
+import models
 
 
 def register(username_val, password_val, email_val, location_val):
@@ -8,13 +8,13 @@ def register(username_val, password_val, email_val, location_val):
     password_val_enc = password_val.encode('utf-8')
     password_hash = hashlib.sha512(password_val_enc + salt_val).hexdigest()
 
-    usr = postduif.User(username=username_val, password=password_hash, salt=salt_val, email=email_val, location=location_val)
-    postduif.session.add(usr)
-    postduif.session.commit()
+    usr = models.User(username=username_val, password=password_hash, salt=salt_val, email=email_val, location=location_val)
+    models.session.add(usr)
+    models.session.commit()
 
 
 def pass_check(user_id, password):
-    for user in postduif.session.query(postduif.User).filter(postduif.User.id == user_id):
+    for user in models.session.query(models.User).filter(models.User.id == user_id):
         database_salt = user.salt
         database_hash = user.password
     password_val_enc = password.encode('utf-8')

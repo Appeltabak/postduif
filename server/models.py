@@ -54,6 +54,7 @@ class User(Base):
     email = Column(String(50))
     location = Column(String(100))
 
+"""
 session = Session()
 for user in session.query(User).join(Duif).filter(Duif.name == 'John Doe').all():
     print(user.username)
@@ -69,3 +70,4 @@ for flight in session.query(Flight):
 
 for message in session.query(Message):
     print(message.msg)
+"""
