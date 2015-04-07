@@ -4,7 +4,7 @@ Postduif is a super awesome web application with duif's.<br />
 Duif's ftw.
 
 ### Setup
-In project root create an virtuelenv with Python 3.*x* and install the
+In project root create a virtuelenv with Python 3.*x* and install the
 requirements:
 
 ```shell
